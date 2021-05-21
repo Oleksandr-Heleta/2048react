@@ -10,7 +10,7 @@ class App extends React.Component {
       addCount: null
     }
     this.onClickNewGame = this.onClickNewGame.bind(this);
-
+    this.keyAction = this.keyAction.bind(this);
   }
   onClickNewGame(e) {
     console.log('do newGame ' + e);

@@ -23,25 +23,24 @@ class Matrix extends React.Component {
         this.onKeyDown = this.onKeyDown.bind(this);
 
     }
-    // shouldComponentUpdate(){
-    //     if(this.props.action === 'newGame') {
-    //       this.onClickNewGame();
-    //       return true;
-    //     };
-    // }
+
     onClickNewGame() {
         this.props.newGame("5");
         console.log("do onClick");
         this.setState(() => {
-            this.state.grid = [
+            let grid = [
                 ['', '2', '', ''],
                 ['', '', '', ''],
                 ['', '', '', ''],
                 ['', '', '', ''],
             ];
-            this.state.cell = [];
+            let cell = [];
             this.randomGrid(this.state);
             this.randomGrid(this.state);
+            return {
+                grid: grid,
+                cell: cell
+            }
         })
 
 
@@ -177,7 +176,7 @@ class Matrix extends React.Component {
         stack.forEach(n => {
             res.push(n.char);
         })
-        this.setState(() => { this.state.addCount += score });
+        this.setState(() => { return { addCount: this.state.addCount + score } });
         return res;
     }
 }
