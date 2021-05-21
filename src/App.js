@@ -7,17 +7,35 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      addCount: null
-    }
+      totalScore: 0,
+      addScore: 0,
+      bestScore: JSON.parse(localStorage.getItem('bestScore')) || 0,
+    };
     this.onClickNewGame = this.onClickNewGame.bind(this);
     this.keyAction = this.keyAction.bind(this);
   }
-  onClickNewGame(e) {
-    console.log('do newGame ' + e);
+  onClickNewGame() {
+    this.setState({ totalScore: 0 })
 
   }
-  keyAction(e) {
-    this.setState({ addCount: e });
+  keyAction(addCount) {
+    this.setState(() => {
+      let best;
+      let total = this.state.totalScore + addCount;
+      if (total > this.state.bestScore) {
+        best = total;
+        localStorage.setItem('bestScore', JSON.stringify(best));
+      } else {
+        best = this.state.bestScore;
+      }
+      return {
+        addScore: addCount,
+        totalScore: total,
+        bestScore: best
+      }
+    })
+
+
   }
 
 
@@ -28,7 +46,8 @@ class App extends React.Component {
 
     return (
       <div >
-        <Summury addCount={this.addCount} />
+        <Summury foRender={this.state}
+        />
         <Matrix newGame={this.onClickNewGame}
           keyAction={this.keyAction} />
 

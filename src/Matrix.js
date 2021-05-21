@@ -25,21 +25,22 @@ class Matrix extends React.Component {
     }
 
     onClickNewGame() {
-        this.props.newGame("5");
-        console.log("do onClick");
+        this.props.newGame();
         this.setState(() => {
-            let grid = [
-                ['', '2', '', ''],
-                ['', '', '', ''],
-                ['', '', '', ''],
-                ['', '', '', ''],
-            ];
-            let cell = [];
-            this.randomGrid(this.state);
-            this.randomGrid(this.state);
+            let startObj = {
+                grid: [
+                    ['', '', '', ''],
+                    ['', '', '', ''],
+                    ['', '', '', ''],
+                    ['', '', '', ''],
+                ],
+                cell: []
+            }
+            this.randomGrid(startObj);
+            this.randomGrid(startObj);
             return {
-                grid: grid,
-                cell: cell
+                grid: startObj.grid,
+                cell: startObj.cell
             }
         })
 
@@ -49,14 +50,17 @@ class Matrix extends React.Component {
         let key = e.code;
         this.setState({ cell: [] });
         let cloneArr = this.state.grid;
-
+        let turnGrids;
         switch (key) {
             case 'ArrowUp':
-                console.log("up");
-                // this.setState({ action: 'Up' });
+                turnGrids = this.rowInColum(this.state.grid);
+                turnGrids = this.moveHorizont(turnGrids, 'left');
+                this.setState({ grid: this.rowInColum(turnGrids) });
                 break;
             case 'ArrowDown':
-                // this.setState({ action: 'Down' });
+                turnGrids = this.rowInColum(this.state.grid);
+                turnGrids = this.moveHorizont(turnGrids, 'right');
+                this.setState({ grid: this.rowInColum(turnGrids) });
                 break;
             case 'ArrowLeft':
                 this.setState({ grid: this.moveHorizont(this.state.grid, 'left') });
@@ -82,7 +86,6 @@ class Matrix extends React.Component {
             j = 1,
 
             str = attributes.grid.map(row =>
-
                 <div key={i += 10} className="row">
                     {row.map(cell =>
                         <div key={i + (j += 1)} className={"cell appear-" + cell} >{cell}</div>
@@ -106,16 +109,12 @@ class Matrix extends React.Component {
     }
 
     randomGrid(attributes) {
-        console.log("do random");
-        let j = getRandom(0, attributes.size.height - 1);
-        let i = getRandom(0, attributes.size.width - 1);
+        let j = getRandom(0, attributes.grid.length - 1);
+        let i = getRandom(0, attributes.grid[0].length - 1);
         if (attributes.grid[j][i] === '') {
-            this.setState(() => {
-                this.state.grid[j][i] = '2';
-                this.state.cell.push([j, i]);
-            })
-            console.log(this.state);
-            return;
+            attributes.grid[j][i] = '2';
+            attributes.cell.push([j, i]);
+            return attributes;
         }
         return this.randomGrid(attributes);
     }
@@ -178,6 +177,23 @@ class Matrix extends React.Component {
         })
         this.setState(() => { return { addCount: this.state.addCount + score } });
         return res;
+    }
+
+    rowInColum(grids) {
+        let turnArr = [];
+        for (let j = 0; j < grids.length; j += 1) {
+            turnArr.push([]);
+            for (let i = 0; i < grids[j].length; i += 1) {
+                turnArr[j].push('');
+            }
+        }
+
+        for (let j = 0; j < grids.length; j += 1) {
+            for (let i = 0; i < grids.length; i += 1) {
+                turnArr[i][j] = grids[j][i];
+            }
+        }
+        return turnArr;
     }
 }
 
