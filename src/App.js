@@ -1,7 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-import Summury from './Summury'
-import Matrix from './Matrix'
+import Summury from './Summury';
+import Matrix from './Matrix';
 
 class App extends React.Component {
   constructor() {
@@ -43,7 +43,7 @@ class App extends React.Component {
 
 
   render() {
-
+    console.log('render app', this.state.addScore);
     return (
       <div >
         <Summury foRender={this.state}
